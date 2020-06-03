@@ -7,6 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft.EntityFrameworkCore.SqlServer.Design
 {
+    /// <summary>
+    ///     Enables configuring design-time services. Tools will automatically discover implementations of this
+    ///     interface that are in the startup assembly.
+    /// </summary>
     public class SqlServerHierarchyIdDesignTimeServices : IDesignTimeServices
     {
         /// <summary>

@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore.Scaffolding;
 
 namespace Microsoft.EntityFrameworkCore.SqlServer.Scaffolding
 {
+    /// <summary>
+    /// HierarchyId code generator plugin <see cref="ProviderCodeGeneratorPlugin"/>.
+    /// </summary>
     public class SqlServerHierarchyIdCodeGeneratorPlugin : ProviderCodeGeneratorPlugin
     {
         /// <summary>

@@ -4,11 +4,25 @@ using System.Reflection;
 
 namespace Microsoft.EntityFrameworkCore.ChangeTracking
 {
+    /// <summary>
+    ///     <para>
+    ///         Specifies custom value snapshotting and comparison for
+    ///         CLR types that cannot be compared with <see cref="object.Equals(object, object)" />
+    ///         and/or need a deep copy when taking a snapshot. For example, arrays of primitive types
+    ///         will require both if mutation is to be detected.
+    ///     </para>
+    ///     <para>
+    ///         Snapshotting is the process of creating a copy of the value into a snapshot so it can
+    ///         later be compared to determine if it has changed. For some types, such as collections,
+    ///         this needs to be a deep copy of the collection rather than just a shallow copy of the
+    ///         reference.
+    ///     </para>
+    /// </summary>
     public class SqlServerHierarchyIdValueComparer : ValueComparer<HierarchyId>
     {
         /// <summary>
         ///     <para>
-        ///         Creates a new <see cref="ValueComparer{T}" /> with the given comparison and
+        ///         Creates a new <see cref="SqlServerHierarchyIdValueComparer" /> with the given comparison and
         ///         snapshotting expressions.
         ///     </para>
         ///     <para>
@@ -18,9 +32,6 @@ namespace Microsoft.EntityFrameworkCore.ChangeTracking
         ///         reference.
         ///     </para>
         /// </summary>
-        /// <param name="equalsExpression"> The comparison expression. </param>
-        /// <param name="hashCodeExpression"> The associated hash code generator. </param>
-        /// <param name="snapshotExpression"> The snapshot expression. </param>
         public SqlServerHierarchyIdValueComparer()
             : base(
                 GetEqualsExpression(),
