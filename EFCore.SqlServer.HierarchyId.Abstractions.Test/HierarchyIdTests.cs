@@ -76,6 +76,7 @@ namespace Microsoft.EntityFrameworkCore
             Assert.True(nullHid == val);
             Assert.True(val != rootHid);
             Assert.True(rootHid != val);
+            Assert.True(val?.ToString() == null);
         }
 
         [Fact]
@@ -88,6 +89,7 @@ namespace Microsoft.EntityFrameworkCore
             Assert.True(nullHid != val);
             Assert.True(val == rootHid);
             Assert.True(rootHid == val);
+            Assert.True(val.ToString() == rootHid.ToString());
         }
 
         [Fact]
@@ -95,12 +97,12 @@ namespace Microsoft.EntityFrameworkCore
         {
             HierarchyId nullHid = null;
             var rootHid = HierarchyId.GetRoot();
-            var val = new[] { null, HierarchyId.GetRoot() }.Max();
+            var val = new[] { null, HierarchyId.GetRoot() }.Min();
             Assert.True(val != nullHid);
             Assert.True(nullHid != val);
             Assert.True(val == rootHid);
             Assert.True(rootHid == val);
-            Assert.True(rootHid.ToString() == val?.ToString());
+            Assert.True(val.ToString() == rootHid.ToString());
         }
 
         [Fact]
@@ -113,7 +115,7 @@ namespace Microsoft.EntityFrameworkCore
             Assert.True(nullHid != val);
             Assert.True(val == rootHid);
             Assert.True(rootHid == val);
-            Assert.True(rootHid.ToString() == val?.ToString());
+            Assert.True(val.ToString() == rootHid.ToString());
         }
 
 
