@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCore.SqlServer.HierarchyId", "EFCore.SqlServer.HierarchyId\EFCore.SqlServer.HierarchyId.csproj", "{8F722A02-71A4-4787-ACD8-FB7D5B7AE648}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCore.SqlServer.HierarchyId.Test", "EFCore.SqlServer.HierarchyId.Test\EFCore.SqlServer.HierarchyId.Test.csproj", "{01F86E65-6448-424C-AAB5-9C6427EF6FD4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCore.SqlServer.HierarchyId.Abstractions", "EFCore.SqlServer.HierarchyId.Abstractions\EFCore.SqlServer.HierarchyId.Abstractions.csproj", "{3D935B7D-80BD-49AD-BDC9-E1B0C9D9494F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCore.SqlServer.HierarchyId.Abstractions.Test", "EFCore.SqlServer.HierarchyId.Abstractions.Test\EFCore.SqlServer.HierarchyId.Abstractions.Test.csproj", "{F2AB77AA-A7BC-47DD-9B29-8B5212211DF9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,18 @@ Global
 		{3D935B7D-80BD-49AD-BDC9-E1B0C9D9494F}.Release|x64.Build.0 = Release|Any CPU
 		{3D935B7D-80BD-49AD-BDC9-E1B0C9D9494F}.Release|x86.ActiveCfg = Release|Any CPU
 		{3D935B7D-80BD-49AD-BDC9-E1B0C9D9494F}.Release|x86.Build.0 = Release|Any CPU
+		{F2AB77AA-A7BC-47DD-9B29-8B5212211DF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2AB77AA-A7BC-47DD-9B29-8B5212211DF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2AB77AA-A7BC-47DD-9B29-8B5212211DF9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F2AB77AA-A7BC-47DD-9B29-8B5212211DF9}.Debug|x64.Build.0 = Debug|Any CPU
+		{F2AB77AA-A7BC-47DD-9B29-8B5212211DF9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F2AB77AA-A7BC-47DD-9B29-8B5212211DF9}.Debug|x86.Build.0 = Debug|Any CPU
+		{F2AB77AA-A7BC-47DD-9B29-8B5212211DF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2AB77AA-A7BC-47DD-9B29-8B5212211DF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2AB77AA-A7BC-47DD-9B29-8B5212211DF9}.Release|x64.ActiveCfg = Release|Any CPU
+		{F2AB77AA-A7BC-47DD-9B29-8B5212211DF9}.Release|x64.Build.0 = Release|Any CPU
+		{F2AB77AA-A7BC-47DD-9B29-8B5212211DF9}.Release|x86.ActiveCfg = Release|Any CPU
+		{F2AB77AA-A7BC-47DD-9B29-8B5212211DF9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
