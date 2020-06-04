@@ -165,8 +165,8 @@ namespace Microsoft.EntityFrameworkCore
         [Fact]
         public void Hierarchyid_compareto_same_as_sqlhierarchyid_compareto()
         {
-            Assert.Throws<NullReferenceException>(() => SqlHierarchyId.GetRoot().CompareTo(null));
-            Assert.Throws<NullReferenceException>(() => HierarchyId.GetRoot().CompareTo(null));
+            Assert.ThrowsAny<Exception>(() => SqlHierarchyId.GetRoot().CompareTo(null));
+            Assert.ThrowsAny<Exception>(() => HierarchyId.GetRoot().CompareTo(null));
 
             var tests = new[]
             {
