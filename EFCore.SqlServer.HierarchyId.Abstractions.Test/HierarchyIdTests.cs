@@ -1,9 +1,6 @@
 ﻿using Microsoft.SqlServer.Types;
 using System;
-using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Xunit;
 
 namespace Microsoft.EntityFrameworkCore
