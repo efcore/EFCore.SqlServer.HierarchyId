@@ -25,6 +25,17 @@ namespace Microsoft.EntityFrameworkCore
         }
 
         [Fact]
+        public void Null_hierarchyid_equal_to_null_hierarchyid()
+        {
+            HierarchyId hid1 = null;
+            HierarchyId hid2 = null;
+            Assert.True(hid1 == hid2);
+            Assert.True(hid2 == hid1);
+            Assert.False(hid1 != hid2);
+            Assert.False(hid2 != hid1);
+        }
+
+        [Fact]
         public void Ordered_ascending_hierarchyId_is_null()
         {
             HierarchyId nullHid = null;
