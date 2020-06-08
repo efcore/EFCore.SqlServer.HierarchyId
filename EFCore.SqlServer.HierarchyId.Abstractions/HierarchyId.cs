@@ -163,7 +163,7 @@ namespace Microsoft.EntityFrameworkCore
             var sh1 = Unwrap(hid1);
             var sh2 = Unwrap(hid2);
 
-            return sh1.IsNull == sh2.IsNull && sh1.CompareTo(sh2) < 0;
+            return !sh1.IsNull && !sh2.IsNull && sh1.CompareTo(sh2) < 0;
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Microsoft.EntityFrameworkCore
             var sh1 = Unwrap(hid1);
             var sh2 = Unwrap(hid2);
 
-            return sh1.IsNull == sh2.IsNull && sh1.CompareTo(sh2) > 0;
+            return !sh1.IsNull && !sh2.IsNull && sh1.CompareTo(sh2) > 0;
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace Microsoft.EntityFrameworkCore
             var sh1 = Unwrap(hid1);
             var sh2 = Unwrap(hid2);
 
-            return sh1.IsNull == sh2.IsNull && sh1.CompareTo(sh2) <= 0;
+            return !sh1.IsNull && !sh2.IsNull && sh1.CompareTo(sh2) <= 0;
         }
 
         /// <summary>
@@ -205,7 +205,7 @@ namespace Microsoft.EntityFrameworkCore
             var sh1 = Unwrap(hid1);
             var sh2 = Unwrap(hid2);
 
-            return sh1.IsNull == sh2.IsNull && sh1.CompareTo(sh2) >= 0;
+            return !sh1.IsNull && !sh2.IsNull && sh1.CompareTo(sh2) >= 0;
         }
 
         private static SqlHierarchyId Unwrap(HierarchyId value)

@@ -1,12 +1,53 @@
 ﻿using Microsoft.SqlServer.Types;
 using System;
+using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using Xunit;
+using Xunit.Operators;
 
 namespace Microsoft.EntityFrameworkCore
 {
-    public class HierarchyIdTests
+    public class HierarchyIdTests: IDisposable
     {
+        private OperatorAsserters asserter;
+        private IBooleanOperatorAsserter[] asserters;
+        public HierarchyIdTests()
+        {
+            asserter = new OperatorAsserters();
+            asserters = new[]
+            {
+                asserter.Equal,
+                asserter.NotEqual,
+                asserter.LessThan,
+                asserter.LessThanOrEqual,
+                asserter.GreaterThan,
+                asserter.GreaterThanOrEqual
+            };
+        }
+
+        [Fact]
+        public void Null_hierarchyId_against_null()
+        {
+            HierarchyId hid = null;
+            foreach (var asserter in asserters)
+            {
+                if (asserter == this.asserter.Equal)
+                {
+                    asserter.True<HierarchyId, HierarchyId>(hid, null);
+                    asserter.True<HierarchyId, HierarchyId>(null, hid);
+
+                }
+                else
+                {
+                    asserter.False<HierarchyId, HierarchyId>(hid, null);
+                    asserter.False<HierarchyId, HierarchyId>(null, hid);
+
+                }
+            }
+        }
+
+
         [Fact]
         public void Null_hierarchyId_equals_null()
         {
@@ -143,69 +184,117 @@ namespace Microsoft.EntityFrameworkCore
             Assert.True(val == rootHid);
             Assert.True(rootHid == val);
         }
+               
 
-        
+        [Fact]
+        public void Hierarchyid_operators_same_as_int_operators()
+        {
+            
+            void performAssertions((int? intVal, HierarchyId hid) current, (int? intVal, HierarchyId hid) previous)
+            {
+                foreach (var asserter in asserters)
+                {
+                    {
+                        var result = asserter.Invoke(current.intVal, previous.intVal);
+                        if (result) asserter.True(current.hid, previous.hid);
+                        else asserter.False(current.hid, previous.hid);
+                    }
+
+                    //test when the values are swapped
+                    {
+                        var result = asserter.Invoke(previous.intVal, current.intVal);
+                        if (result) asserter.True(previous.hid, current.hid);
+                        else asserter.False(previous.hid, current.hid);
+                    }
+                }
+            }
+
+            var vals = new int?[] { null, null, 0, 0, 1, 1, 2, 2 }.Select(x => (intVal: x, hid: ConvertIntToHierarchyId(x)));
+
+            {
+                var testVals = vals.OrderBy(x => x.intVal).ToArray();
+                for (int ndx = 0; ndx < testVals.Length; ndx++)
+                {
+                    var current = testVals[ndx];
+                    var previous = ndx == 0 ? current : testVals[ndx - 1];
+                    performAssertions(current, previous);
+                }
+            }
+
+            {
+                var testVals = vals.OrderByDescending(x => x.intVal).ToArray();
+                for (int ndx = 0; ndx < testVals.Length; ndx++)
+                {
+                    var current = testVals[ndx];
+                    var previous = ndx == 0 ? current : testVals[ndx - 1];
+                    performAssertions(current, previous);
+                }
+            }
+
+        }
 
         [Fact]
         public void Hierarchyid_operators_same_as_sqlhierarchyid_operators()
         {
+            void performAssertions((SqlHierarchyId sqlHid, HierarchyId hid) current, (SqlHierarchyId sqlHid, HierarchyId hid) previous)
             {
-                var x = (int?)null;
-                var y = (int?)1;
-                
-                Assert.True(x != y);
-                Assert.False(x == y);
-                Assert.False(x <  y);
-                Assert.False(x <= y);
-                Assert.False(x >  y);
-                Assert.False(x >= y);
+                foreach (var asserter in asserters)
+                {
+                    //theres a bug in dotmorten's sql server types (https://github.com/dotMorten/Microsoft.SqlServer.Types/issues/36)
+                    //where the underlying comparer is using <= for >=
+                    if (asserter == this.asserter.GreaterThanOrEqual)
+                        continue;
 
-                Assert.True(y != x);
-                Assert.False(y == x);
-                Assert.False(y <  x);
-                Assert.False(y <= x);
-                Assert.False(y >  x);
-                Assert.False(y >= x);
-            }
-            {
-                var x = SqlHierarchyId.Null;
-                var y = SqlHierarchyId.GetRoot();
+                    bool getResultAsBool(SqlHierarchyId left, SqlHierarchyId right)
+                    {
+                        var result = asserter.Invoke<SqlHierarchyId, SqlHierarchyId, SqlBoolean>(left, right);
+                        if (result.IsNull)
+                        {
+                            if (left.IsNull != right.IsNull && asserter == this.asserter.NotEqual)
+                                return true;
+                            if (left.IsNull && right.IsNull && asserter == this.asserter.Equal)
+                                return true;
+                        }
 
-                Assert.True(!(x != y).IsFalse); //special case
-                Assert.False((x == y).IsTrue);
-                Assert.False((x < y).IsTrue);
-                Assert.False((x <= y).IsTrue);
-                Assert.False((x > y).IsTrue);
-                Assert.False((x >= y).IsTrue);
+                        return result.IsTrue;
+                    }
 
-                Assert.True(!(y != x).IsFalse); //special case
-                Assert.False((y == x).IsTrue);
-                Assert.False((y < x).IsTrue);
-                Assert.False((y <= x).IsTrue);
-                Assert.False((y > x).IsTrue);
-                Assert.False((y >= x).IsTrue);
-            }
+                    {
+                        var result = getResultAsBool(current.sqlHid, previous.sqlHid);
+                        if (result) asserter.True(current.hid, previous.hid);
+                        else asserter.False(current.hid, previous.hid);
+                    }
 
-            {
-                var x = (HierarchyId)null;
-                var y = HierarchyId.GetRoot();
-
-                Assert.True(x != y);
-                Assert.False(x == y);
-                Assert.False(x < y);
-                Assert.False(x <= y);
-                Assert.False(x > y);
-                Assert.False(x >= y);
-
-                Assert.True(y != x);
-                Assert.False(y == x);
-                Assert.False(y < x);
-                Assert.False(y <= x);
-                Assert.False(y > x);
-                Assert.False(y >= x);
+                    //test when the values are swapped
+                    {
+                        var result = getResultAsBool(previous.sqlHid, current.sqlHid);
+                        if (result) asserter.True(previous.hid, current.hid);
+                        else asserter.False(previous.hid, current.hid);
+                    }
+                }
             }
 
+            var vals = new int?[] { null, null, 0, 0, 1, 1, 2, 2 }.Select(x => (sqlHid: ConvertIntToSqlHierarchyId(x), hid: ConvertIntToHierarchyId(x)));
 
+            {
+                var testVals = vals.OrderBy(x => x.sqlHid).ToArray();
+                for (int ndx = 0; ndx < testVals.Length; ndx++)
+                {
+                    var current = testVals[ndx];
+                    var previous = ndx == 0 ? current : testVals[ndx - 1];
+                    performAssertions(current, previous);
+                }
+            }
+
+            {
+                var testVals = vals.OrderByDescending(x => x.sqlHid).ToArray();
+                for (int ndx = 0; ndx < testVals.Length; ndx++)
+                {
+                    var current = testVals[ndx];
+                    var previous = ndx == 0 ? current : testVals[ndx - 1];
+                    performAssertions(current, previous);
+                }
+            }
         }
 
         [Fact]
@@ -233,6 +322,8 @@ namespace Microsoft.EntityFrameworkCore
 
         }
 
+
+
         [Fact]
         public void Hierarchyid_equals_same_as_sqlhierarchyid_equals()
         {
@@ -259,6 +350,25 @@ namespace Microsoft.EntityFrameworkCore
         }
 
 
+        private static HierarchyId ConvertIntToHierarchyId(int? val)
+        {
+            if (val == null)
+                return null;
+            else if (val == 0)
+                return HierarchyId.GetRoot();
+            else
+                return HierarchyId.Parse($"/{val}/");
+        }
+
+        private static SqlHierarchyId ConvertIntToSqlHierarchyId(int? val)
+        {
+            if (val == null)
+                return SqlHierarchyId.Null;
+            else if (val == 0)
+                return SqlHierarchyId.GetRoot();
+            else
+                return SqlHierarchyId.Parse($"/{val}/");
+        }
 
         private int GetHierarchyIdComparisonResult(string hid1, string hid2)
             => HierarchyId.Parse(hid1).CompareTo(HierarchyId.Parse(hid2));
@@ -272,6 +382,11 @@ namespace Microsoft.EntityFrameworkCore
         private bool GetSqlHierarchyIdEqualsResult(string hid1, string hid2)
             => SqlHierarchyId.Parse(hid1).Equals(SqlHierarchyId.Parse(hid2));
 
+        public void Dispose()
+        {
+            asserter = null;
+            asserters = null;
+        }
     }
 
 }
