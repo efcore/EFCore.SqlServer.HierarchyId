@@ -27,8 +27,8 @@ namespace Microsoft.EntityFrameworkCore.Test.Operators
         /// <summary>
         /// returns the boolean result of the operator's operation
         /// </summary>
-        /// <param name="operator">the operator to perform the operation</param>
-        /// <param name="operands">the operations to perform the operation against</param>
+        /// <param name="operator">the operator to execute the operation</param>
+        /// <param name="operands">the operands to execute the operation against</param>
         /// <returns></returns>
         public static bool Execute(this Operator @operator, (int? lhs, int? rhs) operands)
         {
@@ -48,8 +48,8 @@ namespace Microsoft.EntityFrameworkCore.Test.Operators
         /// <summary>
         /// returns the boolean result of the operator's operation
         /// </summary>
-        /// <param name="operator">the operator to perform the operation</param>
-        /// <param name="operands">the operations to perform the operation against</param>
+        /// <param name="operator">the operator to execute the operation</param>
+        /// <param name="operands">the operands to execute the operation against</param>
         /// <returns></returns>
         public static bool Execute(this Operator @operator, (HierarchyId lhs, HierarchyId rhs) operands)
         {
@@ -69,8 +69,8 @@ namespace Microsoft.EntityFrameworkCore.Test.Operators
         /// <summary>
         /// returns the boolean result of the operator's operation
         /// </summary>
-        /// <param name="operator">the operator to perform the operation</param>
-        /// <param name="operands">the operations to perform the operation against</param>
+        /// <param name="operator">the operator to execute the operation</param>
+        /// <param name="operands">the operands to execute the operation against</param>
         /// <returns></returns>
         public static bool Execute(this Operator @operator, (SqlHierarchyId lhs, SqlHierarchyId rhs) operands)
         {
