@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Test.Operators;
-using System.Linq;
+﻿using System.Linq;
 using Xunit;
 
 namespace Microsoft.EntityFrameworkCore.SqlServer
@@ -7,281 +6,75 @@ namespace Microsoft.EntityFrameworkCore.SqlServer
     public class NullabilityTests
     {
         [Fact]
-        public void Null_equalTo_null_isTrue()
+        public void Null_against_null()
         {
-            const Operator @operator = Operator.Equal;
-
-            var vals = ((HierarchyId)null, (HierarchyId)null);
-            Assert.True(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-
-            var swapped = vals.Swap();
-            Assert.True(@operator.Execute(swapped), @operator.GetFailureMessage(swapped));
+            Assert.True((HierarchyId)null == (HierarchyId)null);
+            Assert.False((HierarchyId)null != (HierarchyId)null);
+            Assert.False((HierarchyId)null > (HierarchyId)null);
+            Assert.False((HierarchyId)null >= (HierarchyId)null);
+            Assert.False((HierarchyId)null < (HierarchyId)null);
+            Assert.False((HierarchyId)null <= (HierarchyId)null);
         }
 
         [Fact]
-        public void Null_notEqualTo_null_isTrue()
+        public void Null_against_nonNull()
         {
-            const Operator @operator = Operator.NotEqual;
+            var hid = HierarchyId.GetRoot();
+            Assert.False(hid == (HierarchyId)null);
+            Assert.False((HierarchyId)null == hid);
 
-            var vals = ((HierarchyId)null, (HierarchyId)null);
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
+            Assert.True(hid != (HierarchyId)null);
+            Assert.True((HierarchyId)null != hid);
 
-            var swapped = vals.Swap();
-            Assert.False(@operator.Execute(swapped), @operator.GetFailureMessage(swapped));
+            Assert.False(hid > (HierarchyId)null);
+            Assert.False((HierarchyId)null > hid);
+
+            Assert.False(hid >= (HierarchyId)null);
+            Assert.False((HierarchyId)null >= hid);
+
+            Assert.False(hid < (HierarchyId)null);
+            Assert.False((HierarchyId)null < hid);
+
+            Assert.False(hid <= (HierarchyId)null);
+            Assert.False((HierarchyId)null <= hid);
         }
 
         [Fact]
-        public void Null_greaterThan_null_isFalse()
+        public void NullOnly_aggregates_equalTo_null()
         {
-            const Operator @operator = Operator.GreaterThan;
+            var hid = (HierarchyId)null;
+            var collection = new[] { (HierarchyId)null, (HierarchyId)null, };
+            var min = collection.Min();
+            var max = collection.Max();
 
-            var vals = ((HierarchyId)null, (HierarchyId)null);
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
+            Assert.True(hid == min);
+            Assert.True(min == hid);
+            Assert.False(hid != min);
+            Assert.False(min != hid);
 
-            var swapped = vals.Swap();
-            Assert.False(@operator.Execute(swapped), @operator.GetFailureMessage(swapped));
+            Assert.True(hid == max);
+            Assert.True(max == hid);
+            Assert.False(hid != max);
+            Assert.False(max != hid);
         }
 
         [Fact]
-        public void Null_greaterThanOrEqualTo_null_isFalse()
+        public void Aggregates_including_nulls_equalTo_nonNull()
         {
-            const Operator @operator = Operator.GreaterThanOrEqual;
-
-            var vals = ((HierarchyId)null, (HierarchyId)null);
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-
-            var swapped = vals.Swap();
-            Assert.False(@operator.Execute(swapped), @operator.GetFailureMessage(swapped));
-        }
-
-        [Fact]
-        public void Null_lessThan_null_isFalse()
-        {
-            const Operator @operator = Operator.LessThan;
-
-            var vals = ((HierarchyId)null, (HierarchyId)null);
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-
-            var swapped = vals.Swap();
-            Assert.False(@operator.Execute(swapped), @operator.GetFailureMessage(swapped));
-        }
-
-        [Fact]
-        public void Null_lessThanOrEqualTo_null_isFalse()
-        {
-            const Operator @operator = Operator.LessThanOrEqual;
-
-            var vals = ((HierarchyId)null, (HierarchyId)null);
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-
-            var swapped = vals.Swap();
-            Assert.False(@operator.Execute(swapped), @operator.GetFailureMessage(swapped));
-        }
-
-
-        [Fact]
-        public void Null_greaterThan_nonNull_isFalse()
-        {
-            const Operator @operator = Operator.GreaterThan;
-
-            var vals = ((HierarchyId)null, HierarchyId.GetRoot());
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-        }
-
-        [Fact]
-        public void Null_greaterThanOrEqualTo_nonNull_isFalse()
-        {
-            const Operator @operator = Operator.GreaterThanOrEqual;
-
-            var vals = ((HierarchyId)null, HierarchyId.GetRoot());
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-        }
-
-        [Fact]
-        public void Null_lessThan_nonNull_isFalse()
-        {
-            const Operator @operator = Operator.LessThan;
-
-            var vals = ((HierarchyId)null, HierarchyId.GetRoot());
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-        }
-
-        [Fact]
-        public void Null_lessThanOrEqualTo_nonNull_isFalse()
-        {
-            const Operator @operator = Operator.LessThanOrEqual;
-
-            var vals = ((HierarchyId)null, HierarchyId.GetRoot());
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-        }
-
-        [Fact]
-        public void NonNull_greaterThan_null_isFalse()
-        {
-            const Operator @operator = Operator.GreaterThan;
-
-            var vals = (HierarchyId.GetRoot(), (HierarchyId)null);
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-        }
-
-        [Fact]
-        public void NonNull_greaterThanOrEqualTo_null_isFalse()
-        {
-            const Operator @operator = Operator.GreaterThanOrEqual;
-
-            var vals = (HierarchyId.GetRoot(), (HierarchyId)null);
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-        }
-
-        [Fact]
-        public void NonNull_lessThan_null_isFalse()
-        {
-            const Operator @operator = Operator.LessThan;
-
-            var vals = (HierarchyId.GetRoot(), (HierarchyId)null);
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-        }
-
-        [Fact]
-        public void NonNull_lessThanOrEqualTo_null_isFalse()
-        {
-            const Operator @operator = Operator.LessThanOrEqual;
-
-            var vals = (HierarchyId.GetRoot(), (HierarchyId)null);
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-        }
-
-        [Fact]
-        public void NonNull_notEqualTo_null_isTrue()
-        {
-            const Operator @operator = Operator.NotEqual;
-
-            var vals = (HierarchyId.GetRoot(), (HierarchyId)null);
-            Assert.True(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-        }
-
-        [Fact]
-        public void Null_notEqualTo_nonNull_isTrue()
-        {
-            const Operator @operator = Operator.NotEqual;
-
-            var vals = ((HierarchyId)null, HierarchyId.GetRoot());
-            Assert.True(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-        }
-
-
-        [Fact]
-        public void Min_includingNulls_equalTo_nonNull_isTrue()
-        {
-            const Operator @operator = Operator.Equal;
-
-            var min = new[] { (HierarchyId)null, (HierarchyId)null, HierarchyId.GetRoot(), HierarchyId.GetRoot(), }.Min();
-
-            var vals = (HierarchyId.GetRoot(), min);
-            Assert.True(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-
-            var swapped = vals.Swap();
-            Assert.True(@operator.Execute(swapped), @operator.GetFailureMessage(swapped));
-        }
-
-        [Fact]
-        public void Min_includingNulls_notEqualTo_nonNull_isFalse()
-        {
-            const Operator @operator = Operator.NotEqual;
-
-            var min = new[] { (HierarchyId)null, (HierarchyId)null, HierarchyId.GetRoot(), HierarchyId.GetRoot(), }.Min();
-
-            var vals = (HierarchyId.GetRoot(), min);
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-
-            var swapped = vals.Swap();
-            Assert.False(@operator.Execute(swapped), @operator.GetFailureMessage(swapped));
-        }
-
-
-        [Fact]
-        public void Max_includingNulls_notEqualTo_null_isTrue()
-        {
-            const Operator @operator = Operator.NotEqual;
-
-            var max = new[] { (HierarchyId)null, (HierarchyId)null, HierarchyId.GetRoot(), HierarchyId.GetRoot(), }.Max();
-
-            var vals = ((HierarchyId)null, max);
-            Assert.True(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-
-            var swapped = vals.Swap();
-            Assert.True(@operator.Execute(swapped), @operator.GetFailureMessage(swapped));
-        }
-
-        [Fact]
-        public void Max_includingNulls_equalTo_null_isFalse()
-        {
-            const Operator @operator = Operator.Equal;
-
-            var max = new[] { (HierarchyId)null, (HierarchyId)null, HierarchyId.GetRoot(), HierarchyId.GetRoot(), }.Max();
-
-            var vals = ((HierarchyId)null, max);
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-
-            var swapped = vals.Swap();
-            Assert.False(@operator.Execute(swapped), @operator.GetFailureMessage(swapped));
-        }
-
-
-        [Fact]
-        public void Min_nullsOnly_equalTo_null_isTrue()
-        {
-            const Operator @operator = Operator.Equal;
-
-            var min = new[] { (HierarchyId)null, (HierarchyId)null, }.Min();
-
-            var vals = ((HierarchyId)null, min);
-            Assert.True(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-
-            var swapped = vals.Swap();
-            Assert.True(@operator.Execute(swapped), @operator.GetFailureMessage(swapped));
-        }
-
-        [Fact]
-        public void Min_nullsOnly_notEqualTo_null_isFalse()
-        {
-            const Operator @operator = Operator.NotEqual;
-
-            var min = new[] { (HierarchyId)null, (HierarchyId)null, }.Min();
-
-            var vals = ((HierarchyId)null, min);
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-
-            var swapped = vals.Swap();
-            Assert.False(@operator.Execute(swapped), @operator.GetFailureMessage(swapped));
-        }
-
-        [Fact]
-        public void Max_nullsOnly_equalTo_null_isTrue()
-        {
-            const Operator @operator = Operator.Equal;
-
-            var max = new[] { (HierarchyId)null, (HierarchyId)null, }.Max();
-
-            var vals = ((HierarchyId)null, max);
-            Assert.True(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-
-            var swapped = vals.Swap();
-            Assert.True(@operator.Execute(swapped), @operator.GetFailureMessage(swapped));
-        }
-
-        [Fact]
-        public void Max_nullsOnly_notEqualTo_null_isFalse()
-        {
-            const Operator @operator = Operator.NotEqual;
-
-            var min = new[] { (HierarchyId)null, (HierarchyId)null, }.Max();
-
-            var vals = ((HierarchyId)null, min);
-            Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
-
-            var swapped = vals.Swap();
-            Assert.False(@operator.Execute(swapped), @operator.GetFailureMessage(swapped));
+            var hid = HierarchyId.GetRoot();
+            var collection = new[] { (HierarchyId)null, (HierarchyId)null, HierarchyId.GetRoot(), HierarchyId.GetRoot(), };
+            var min = collection.Min();
+            var max = collection.Max();
+
+            Assert.True(hid == min);
+            Assert.True(min == hid);
+            Assert.False(hid != min);
+            Assert.False(min != hid);
+
+            Assert.True(hid == max);
+            Assert.True(max == hid);
+            Assert.False(hid != max);
+            Assert.False(max != hid);
         }
     }
 }
