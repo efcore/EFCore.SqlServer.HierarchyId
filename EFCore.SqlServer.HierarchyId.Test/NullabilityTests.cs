@@ -175,7 +175,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer
         {
             const Operator @operator = Operator.Equal;
 
-            var min = new[] { (HierarchyId)null, HierarchyId.GetRoot() }.Min();
+            var min = new[] { (HierarchyId)null, (HierarchyId)null, HierarchyId.GetRoot(), HierarchyId.GetRoot(), }.Min();
 
             var vals = (HierarchyId.GetRoot(), min);
             Assert.True(@operator.Execute(vals), @operator.GetFailureMessage(vals));
@@ -189,7 +189,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer
         {
             const Operator @operator = Operator.NotEqual;
 
-            var min = new[] { (HierarchyId)null, HierarchyId.GetRoot() }.Min();
+            var min = new[] { (HierarchyId)null, (HierarchyId)null, HierarchyId.GetRoot(), HierarchyId.GetRoot(), }.Min();
 
             var vals = (HierarchyId.GetRoot(), min);
             Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
@@ -204,7 +204,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer
         {
             const Operator @operator = Operator.NotEqual;
 
-            var max = new[] { (HierarchyId)null, HierarchyId.GetRoot() }.Max();
+            var max = new[] { (HierarchyId)null, (HierarchyId)null, HierarchyId.GetRoot(), HierarchyId.GetRoot(), }.Max();
 
             var vals = ((HierarchyId)null, max);
             Assert.True(@operator.Execute(vals), @operator.GetFailureMessage(vals));
@@ -218,7 +218,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer
         {
             const Operator @operator = Operator.Equal;
 
-            var max = new[] { (HierarchyId)null, HierarchyId.GetRoot() }.Max();
+            var max = new[] { (HierarchyId)null, (HierarchyId)null, HierarchyId.GetRoot(), HierarchyId.GetRoot(), }.Max();
 
             var vals = ((HierarchyId)null, max);
             Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
@@ -233,7 +233,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer
         {
             const Operator @operator = Operator.Equal;
 
-            var min = new[] { (HierarchyId)null }.Min();
+            var min = new[] { (HierarchyId)null, (HierarchyId)null, }.Min();
 
             var vals = ((HierarchyId)null, min);
             Assert.True(@operator.Execute(vals), @operator.GetFailureMessage(vals));
@@ -247,7 +247,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer
         {
             const Operator @operator = Operator.NotEqual;
 
-            var min = new[] { (HierarchyId)null }.Min();
+            var min = new[] { (HierarchyId)null, (HierarchyId)null, }.Min();
 
             var vals = ((HierarchyId)null, min);
             Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
@@ -261,7 +261,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer
         {
             const Operator @operator = Operator.Equal;
 
-            var max = new[] { (HierarchyId)null }.Max();
+            var max = new[] { (HierarchyId)null, (HierarchyId)null, }.Max();
 
             var vals = ((HierarchyId)null, max);
             Assert.True(@operator.Execute(vals), @operator.GetFailureMessage(vals));
@@ -275,7 +275,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer
         {
             const Operator @operator = Operator.NotEqual;
 
-            var min = new[] { (HierarchyId)null }.Max();
+            var min = new[] { (HierarchyId)null, (HierarchyId)null, }.Max();
 
             var vals = ((HierarchyId)null, min);
             Assert.False(@operator.Execute(vals), @operator.GetFailureMessage(vals));
