@@ -32,14 +32,9 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Storage
 
         private static RelationalTypeMappingParameters CreateRelationalTypeMappingParameters(string storeType, Type clrType)
         {
-            var comparer = new SqlServerHierarchyIdValueComparer();
-
             return new RelationalTypeMappingParameters(
                 new CoreTypeMappingParameters(
-                    clrType,
-                    null,
-                    comparer,
-                    comparer),
+                    clrType),
                 storeType);
         }
 
