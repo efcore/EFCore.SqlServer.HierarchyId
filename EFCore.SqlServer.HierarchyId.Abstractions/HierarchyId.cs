@@ -131,7 +131,12 @@ namespace Microsoft.EntityFrameworkCore
         /// <param name="hid2">The second node to compare.</param>
         /// <returns>True if <paramref name="hid1"/> and <paramref name="hid2"/> are equal; otherwise, false.</returns>
         public static bool operator ==(HierarchyId hid1, HierarchyId hid2)
-            => Unwrap(hid1).CompareTo(Unwrap(hid2)) == 0;
+        {
+            var sh1 = Unwrap(hid1);
+            var sh2 = Unwrap(hid2);
+
+            return sh1.IsNull == sh2.IsNull && sh1.CompareTo(sh2) == 0;
+        }
 
         /// <summary>
         /// Evaluates whether two nodes are unequal.
@@ -140,7 +145,12 @@ namespace Microsoft.EntityFrameworkCore
         /// <param name="hid2">The second node to compare.</param>
         /// <returns>True if <paramref name="hid1"/> and <paramref name="hid2"/> are unequal; otherwise, false.</returns>
         public static bool operator !=(HierarchyId hid1, HierarchyId hid2)
-            => Unwrap(hid1).CompareTo(Unwrap(hid2)) != 0;
+        {
+            var sh1 = Unwrap(hid1);
+            var sh2 = Unwrap(hid2);
+
+            return sh1.IsNull != sh2.IsNull || sh1.CompareTo(sh2) != 0;
+        }
 
         /// <summary>
         /// Evaluates whether one node is less than another.
@@ -149,7 +159,12 @@ namespace Microsoft.EntityFrameworkCore
         /// <param name="hid2">The second node to compare.</param>
         /// <returns>True if <paramref name="hid1"/> is less than <paramref name="hid2"/>; otherwise, false.</returns>
         public static bool operator <(HierarchyId hid1, HierarchyId hid2)
-            => Unwrap(hid1).CompareTo(Unwrap(hid2)) < 0;
+        {
+            var sh1 = Unwrap(hid1);
+            var sh2 = Unwrap(hid2);
+
+            return !sh1.IsNull && !sh2.IsNull && sh1.CompareTo(sh2) < 0;
+        }
 
         /// <summary>
         /// Evaluates whether one node is greater than another.
@@ -158,7 +173,12 @@ namespace Microsoft.EntityFrameworkCore
         /// <param name="hid2">The second node to compare.</param>
         /// <returns>True if <paramref name="hid1"/> is greather than <paramref name="hid2"/>; otherwise, false.</returns>
         public static bool operator >(HierarchyId hid1, HierarchyId hid2)
-            => Unwrap(hid1).CompareTo(Unwrap(hid2)) > 0;
+        {
+            var sh1 = Unwrap(hid1);
+            var sh2 = Unwrap(hid2);
+
+            return !sh1.IsNull && !sh2.IsNull && sh1.CompareTo(sh2) > 0;
+        }
 
         /// <summary>
         /// Evaluates whether one node is less than or equal to another.
@@ -167,7 +187,12 @@ namespace Microsoft.EntityFrameworkCore
         /// <param name="hid2">The second node to compare.</param>
         /// <returns>True if <paramref name="hid1"/> is less than or equal to <paramref name="hid2"/>; otherwise, false.</returns>
         public static bool operator <=(HierarchyId hid1, HierarchyId hid2)
-            => Unwrap(hid1).CompareTo(Unwrap(hid2)) <= 0;
+        {
+            var sh1 = Unwrap(hid1);
+            var sh2 = Unwrap(hid2);
+
+            return !sh1.IsNull && !sh2.IsNull && sh1.CompareTo(sh2) <= 0;
+        }
 
         /// <summary>
         /// Evaluates whether one node is greater than or equal to another.
@@ -176,7 +201,12 @@ namespace Microsoft.EntityFrameworkCore
         /// <param name="hid2">The second node to compare.</param>
         /// <returns>True if <paramref name="hid1"/> is greater than or equal to <paramref name="hid2"/>; otherwise, false.</returns>
         public static bool operator >=(HierarchyId hid1, HierarchyId hid2)
-            => Unwrap(hid1).CompareTo(Unwrap(hid2)) >= 0;
+        {
+            var sh1 = Unwrap(hid1);
+            var sh2 = Unwrap(hid2);
+
+            return !sh1.IsNull && !sh2.IsNull && sh1.CompareTo(sh2) >= 0;
+        }
 
         private static SqlHierarchyId Unwrap(HierarchyId value)
             => value?._value ?? SqlHierarchyId.Null;
