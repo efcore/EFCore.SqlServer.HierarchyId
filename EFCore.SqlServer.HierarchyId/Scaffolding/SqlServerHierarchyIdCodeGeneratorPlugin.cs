@@ -6,7 +6,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Scaffolding
     /// <summary>
     /// HierarchyId code generator plugin <see cref="ProviderCodeGeneratorPlugin"/>.
     /// </summary>
-    public class SqlServerHierarchyIdCodeGeneratorPlugin : ProviderCodeGeneratorPlugin
+    internal class SqlServerHierarchyIdCodeGeneratorPlugin : ProviderCodeGeneratorPlugin
     {
         /// <summary>
         ///     Generates a method chain to configure additional context options.

@@ -7,6 +7,8 @@
     <RootNamespace>Microsoft.EntityFrameworkCore.SqlServer</RootNamespace>
     <Features>strict</Features>
     <LangVersion>latest</LangVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

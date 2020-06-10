@@ -1,3 +1,6 @@
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Data;
 using System.Data.Common;
@@ -6,11 +9,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Microsoft.EntityFrameworkCore.SqlServer.Storage
 {
@@ -19,31 +17,33 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Storage
         private static readonly MethodInfo _getSqlBytes
             = typeof(SqlDataReader).GetRuntimeMethod(nameof(SqlDataReader.GetSqlBytes), new[] { typeof(int) });
 
+        private static readonly MethodInfo _parseHierarchyId
+            = typeof(HierarchyId).GetRuntimeMethod(nameof(HierarchyId.Parse), new[] { typeof(string) });
+
+        private static readonly SqlServerHierarchyIdValueConverter _valueConverter = new SqlServerHierarchyIdValueConverter();
+
         private static Action<DbParameter, SqlDbType> _sqlDbTypeSetter;
         private static Action<DbParameter, string> _udtTypeNameSetter;
 
-        protected virtual ValueConverter<HierarchyId, SqlBytes> ValueConverter { get; }
 
         public SqlServerHierarchyIdTypeMapping(string storeType, Type clrType)
             : base(CreateRelationalTypeMappingParameters(storeType, clrType))
-        {
-            ValueConverter = new SqlServerHierarchyIdValueConverter();
-        }
+        {}
 
         private static RelationalTypeMappingParameters CreateRelationalTypeMappingParameters(string storeType, Type clrType)
         {
             return new RelationalTypeMappingParameters(
                 new CoreTypeMappingParameters(
-                    clrType),
+                    clrType: clrType,
+                    converter: null //this gets the generatecodeliteral to run
+                ),
                 storeType);
         }
 
         // needed to implement Clone
-        protected SqlServerHierarchyIdTypeMapping(RelationalTypeMappingParameters parameters, ValueConverter<HierarchyId, SqlBytes> converter)
+        protected SqlServerHierarchyIdTypeMapping(RelationalTypeMappingParameters parameters)
             : base(parameters)
-        {
-            ValueConverter = converter;
-        }
+        {}
 
         /// <summary>
         ///     Creates a copy of this mapping.
@@ -52,7 +52,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Storage
         /// <returns> The newly created mapping. </returns>
         protected override RelationalTypeMapping Clone(RelationalTypeMappingParameters parameters)
         {
-            return new SqlServerHierarchyIdTypeMapping(parameters, ValueConverter);
+            return new SqlServerHierarchyIdTypeMapping(parameters);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Storage
         public override Expression GenerateCodeLiteral(object value)
         {
             return Expression.Call(
-                typeof(HierarchyId).GetRuntimeMethod("Parse", new[] { typeof(string) }),
+                _parseHierarchyId,
                 Expression.Constant(value.ToString(), typeof(string))
             );
         }
@@ -108,10 +108,15 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Storage
         /// </returns>
         protected override string GenerateNonNullSqlLiteral(object value)
         {
-            if (value is HierarchyId hierarchyId)
-                return $"'{hierarchyId}'";
+            //this appears to only be called when using the update-database
+            //command, and the value is already a hierarchyid
+            
+            if (value is HierarchyId)
+                return $"'{value}'";
 
-            value = (Converter ?? ValueConverter).ConvertFromProvider(value);
+            //not sure how sqlbytes would be passed here, but it's here
+            //in case it ever is
+            value = _valueConverter.ConvertFromProvider(value);
             return $"'{value}'";
         }
 
@@ -129,14 +134,9 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Storage
             parameter.Direction = ParameterDirection.Input;
             parameter.ParameterName = name;
 
-            if (Converter != null)
-            {
-                value = Converter.ConvertToProvider(value);
-            }
-
             parameter.Value = value == null
                 ? DBNull.Value
-                : ValueConverter.ConvertToProvider(value);
+                : _valueConverter.ConvertToProvider(value);
 
             if (nullable.HasValue)
             {
@@ -156,15 +156,12 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Storage
         /// <returns> The expression with conversion added. </returns>
         public override Expression CustomizeDataReaderExpression(Expression expression)
         {
-            if (expression.Type != ValueConverter.ProviderClrType)
-            {
-                expression = Expression.Convert(expression, ValueConverter.ProviderClrType);
-            }
-
+            //because _getSqlBytes is specified as the datareader method, 
+            //the value will need to be converted from sqlbytes a hierarchyid
             return ReplacingExpressionVisitor.Replace(
-                ValueConverter.ConvertFromProviderExpression.Parameters.Single(),
+                _valueConverter.ConvertFromProviderExpression.Parameters.Single(),
                 expression,
-                ValueConverter.ConvertFromProviderExpression.Body);
+                _valueConverter.ConvertFromProviderExpression.Body);
         }
 
         private static Action<DbParameter, SqlDbType> CreateSqlDbTypeAccessor(Type paramType)

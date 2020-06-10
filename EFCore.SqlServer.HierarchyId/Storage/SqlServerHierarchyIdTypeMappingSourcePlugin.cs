@@ -5,7 +5,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Storage
     /// <summary>
     /// maps HierarchyIds to sqlserver's hierarchyid data type
     /// </summary>
-    public class SqlServerHierarchyIdTypeMappingSourcePlugin : IRelationalTypeMappingSourcePlugin
+    internal class SqlServerHierarchyIdTypeMappingSourcePlugin : IRelationalTypeMappingSourcePlugin
     {
         /// <summary>
         /// the type name from sql server
