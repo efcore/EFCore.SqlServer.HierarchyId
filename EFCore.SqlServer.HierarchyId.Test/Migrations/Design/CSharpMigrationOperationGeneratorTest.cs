@@ -165,7 +165,8 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Migrations.Design
                     Assert.Equal(_childHid2, o.Values[1, 0]);
                 });
         }
-        
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "Uses efcore internal apis")]
         private void Test<T>(T operation, string expectedCode, Action<T> assert)
             where T : MigrationOperation
         {

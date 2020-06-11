@@ -153,6 +153,7 @@ namespace RootNamespace
         protected void Test(Action<ModelBuilder> buildModel, string expectedCode, Action<IModel> assert)
             => Test(buildModel, expectedCode, (m, _) => assert(m));
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "Uses efcore internal apis")]
         protected void Test(Action<ModelBuilder> buildModel, string expectedCode, Action<IModel, IModel> assert)
         {
             var modelBuilder = CreateConventionalModelBuilder();
@@ -168,6 +169,7 @@ namespace RootNamespace
         protected void Test(IModel model, string expectedCode, Action<IModel> assert)
             => Test(model, expectedCode, (m, _) => assert(m));
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "Uses efcore internal apis")]
         protected void Test(IModel model, string expectedCode, Action<IModel, IModel> assert)
         {
             var sqlServerTypeMappingSource = new SqlServerTypeMappingSource(
