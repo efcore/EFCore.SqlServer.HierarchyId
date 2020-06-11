@@ -13,6 +13,7 @@ namespace Microsoft.EntityFrameworkCore.TestUtilities
     public class TestLogger<TDefinitions> : TestLoggerBase, IDiagnosticsLogger, ILogger
         where TDefinitions : LoggingDefinitions, new()
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "Uses efcore internal apis")]
         public ILoggingOptions Options => new LoggingOptions();
 
         public bool IsEnabled(LogLevel logLevel) => EnabledFor == logLevel;

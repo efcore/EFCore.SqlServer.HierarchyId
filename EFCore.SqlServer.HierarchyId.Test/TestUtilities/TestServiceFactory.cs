@@ -27,6 +27,7 @@ namespace Microsoft.EntityFrameworkCore.TestUtilities
         private readonly ConcurrentDictionary<Type, IServiceProvider> _factories
             = new ConcurrentDictionary<Type, IServiceProvider>();
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "Uses efcore internal apis")]
         private readonly IReadOnlyList<(Type Type, object Implementation)> _wellKnownExceptions
             = new List<(Type, object)>
             {
