@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Migrations.Design;
 using Microsoft.EntityFrameworkCore.Migrations.Internal;
-using Microsoft.EntityFrameworkCore.SqlServer.Facts;
 using Microsoft.EntityFrameworkCore.SqlServer.Storage;
 using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -23,8 +22,15 @@ using Xunit;
 
 namespace Microsoft.EntityFrameworkCore.SqlServer.Migrations
 {
-    public class ModelSnapshotSqlServerTest
+    public class ModelSnapshotSqlServerTest : IClassFixture<NeedsBuildReferencesFixture>
     {
+        private readonly NeedsBuildReferencesFixture _fixture;
+
+        public ModelSnapshotSqlServerTest(NeedsBuildReferencesFixture fixture)
+        {
+            _fixture = fixture;
+        }
+
         private class EntityWithHierarchyId
         {
             public HierarchyId Id { get; set; }
@@ -32,7 +38,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Migrations
 
         #region SeedData
 
-        [SkipOnNetFrameworkFact]
+        [Fact]
         public virtual void SeedData_annotations_are_stored_in_snapshot()
         {
             static List<IProperty> getAllProperties(IModel model)
@@ -142,13 +148,13 @@ namespace RootNamespace
 
         #endregion
 
-        protected virtual ICollection<BuildReference> GetReferences() => new List<BuildReference>
-        {
-            BuildReference.ByName("Microsoft.EntityFrameworkCore"),
-            BuildReference.ByName("Microsoft.EntityFrameworkCore.Relational"),
-            BuildReference.ByName("Microsoft.EntityFrameworkCore.SqlServer"),
-            BuildReference.ByName("EntityFrameworkCore.SqlServer.HierarchyId.Abstractions")
-        };
+        protected ICollection<BuildReference> GetReferences()
+            => _fixture.GetBuildReferences(
+                BuildReference.ByName("Microsoft.EntityFrameworkCore"),
+                BuildReference.ByName("Microsoft.EntityFrameworkCore.Relational"),
+                BuildReference.ByName("Microsoft.EntityFrameworkCore.SqlServer"),
+                BuildReference.ByName("EntityFrameworkCore.SqlServer.HierarchyId.Abstractions"));
+                
 
         protected void Test(Action<ModelBuilder> buildModel, string expectedCode, Action<IModel> assert)
             => Test(buildModel, expectedCode, (m, _) => assert(m));

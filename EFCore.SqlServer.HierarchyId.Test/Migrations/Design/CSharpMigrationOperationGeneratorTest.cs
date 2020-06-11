@@ -7,27 +7,34 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Migrations.Design;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
-using Microsoft.EntityFrameworkCore.SqlServer.Facts;
 using Microsoft.EntityFrameworkCore.SqlServer.Storage;
 using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.TestUtilities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Xunit;
 
 namespace Microsoft.EntityFrameworkCore.SqlServer.Migrations.Design
 {
-    public class CSharpMigrationOperationGeneratorTest
+    public class CSharpMigrationOperationGeneratorTest : IClassFixture<NeedsBuildReferencesFixture>
     {
+        private readonly NeedsBuildReferencesFixture _fixture;
+
         private static readonly string _eol = Environment.NewLine;
 
         private static readonly HierarchyId _rootHid = HierarchyId.GetRoot();
         private static readonly HierarchyId _childHid1 = HierarchyId.Parse("/1/");
         private static readonly HierarchyId _childHid2 = HierarchyId.Parse("/2/");
 
-        [SkipOnNetFrameworkFact]
+        public CSharpMigrationOperationGeneratorTest(NeedsBuildReferencesFixture fixture)
+        {
+            _fixture = fixture;
+        }
+
+        [Fact]
         public void InsertDataOperation_all_args()
         {
             Test(
@@ -75,7 +82,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Migrations.Design
                 });
         }
 
-        [SkipOnNetFrameworkFact]
+        [Fact]
         public void InsertDataOperation_required_args()
         {
             Test(
@@ -102,7 +109,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Migrations.Design
                 });
         }
 
-        [SkipOnNetFrameworkFact]
+        [Fact]
         public void InsertDataOperation_required_args_composite()
         {
             Test(
@@ -130,7 +137,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Migrations.Design
                 });
         }
 
-        [SkipOnNetFrameworkFact]
+        [Fact]
         public void InsertDataOperation_required_args_multiple_rows()
         {
             Test(
@@ -166,6 +173,12 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Migrations.Design
                 });
         }
 
+        protected ICollection<BuildReference> GetReferences()
+            => _fixture.GetBuildReferences(
+                BuildReference.ByName("Microsoft.EntityFrameworkCore.Relational"),
+                BuildReference.ByName("EntityFrameworkCore.SqlServer.HierarchyId.Abstractions"));
+
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "Uses efcore internal apis")]
         private void Test<T>(T operation, string expectedCode, Action<T> assert)
             where T : MigrationOperation
@@ -189,10 +202,6 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Migrations.Design
 
             var build = new BuildSource
             {
-                References =
-                {
-                    BuildReference.ByName("Microsoft.EntityFrameworkCore.Relational"), BuildReference.ByName("EntityFrameworkCore.SqlServer.HierarchyId.Abstractions")
-                },
                 Sources =
                 {
                     @"
@@ -210,6 +219,11 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Migrations.Design
                 "
                 }
             };
+
+            foreach (var buildReference in GetReferences())
+            {
+                build.References.Add(buildReference);
+            }
 
             var assembly = build.BuildInMemory();
             var factoryType = assembly.GetType("OperationsFactory");
