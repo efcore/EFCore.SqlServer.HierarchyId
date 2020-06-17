@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.EntityFrameworkCore.Migrations.Design;
-using Microsoft.EntityFrameworkCore.SqlServer.Migrations.Models;
+using Microsoft.EntityFrameworkCore.SqlServer.Test.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Xunit;
 
-namespace Microsoft.EntityFrameworkCore.SqlServer.Migrations
+namespace Microsoft.EntityFrameworkCore.SqlServer
 {
     public class MigrationTests
     {
