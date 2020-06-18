@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Design.Internal;
 using Microsoft.EntityFrameworkCore.Migrations.Design;
-using Microsoft.EntityFrameworkCore.SqlServer.Test.Models;
+using Microsoft.EntityFrameworkCore.SqlServer.Test.Models.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Xunit;
@@ -26,7 +26,8 @@ namespace Microsoft.EntityFrameworkCore.SqlServer
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "Uses internal efcore apis")]
-        private void ValidateSnapshotAndMigrationCode(MigrationContext context)
+        private void ValidateSnapshotAndMigrationCode<T>(T context)
+            where T: DbContext, IMigrationContext
         {
             const string migrationName = "MyMigration";
             const string @namespace = "MyApp.Data";
