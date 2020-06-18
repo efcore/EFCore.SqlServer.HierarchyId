@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.SqlServer.Metadata.Internal;
 
 namespace Microsoft.EntityFrameworkCore.SqlServer.Test.Models.Migrations
 {
@@ -22,8 +24,8 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Test.Models.Migrations
             //the values of these could change between versions
             //so get rid of them for the tests
             model.RemoveAnnotation(CoreAnnotationNames.ProductVersion);
-            model.RemoveAnnotation("Relational:MaxIdentifierLength");
-            model.RemoveAnnotation("SqlServer:ValueGenerationStrategy");
+            model.RemoveAnnotation(RelationalAnnotationNames.MaxIdentifierLength);
+            model.RemoveAnnotation(SqlServerAnnotationNames.ValueGenerationStrategy);
         }
 
         protected abstract void SeedData(EntityTypeBuilder<T> builder);
