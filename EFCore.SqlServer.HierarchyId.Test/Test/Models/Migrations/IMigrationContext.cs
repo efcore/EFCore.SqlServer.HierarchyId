@@ -2,7 +2,7 @@
 {
     internal interface IMigrationContext
     {
-        public abstract string GetExpectedMigrationCode(string migrationName, string @namespace);
-        public abstract string GetExpectedSnapshotCode(string @namespace);
+        string GetExpectedMigrationCode(string migrationName, string @namespace);
+        string GetExpectedSnapshotCode(string @namespace);
     }
 }
