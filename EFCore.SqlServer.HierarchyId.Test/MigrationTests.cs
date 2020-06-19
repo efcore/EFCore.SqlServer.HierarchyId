@@ -13,21 +13,20 @@ namespace Microsoft.EntityFrameworkCore.SqlServer
         [Fact]
         public void Migration_and_snapshot_generate_with_typed_array()
         {
-            using var db = new MigrationContext1();
-            ValidateSnapshotAndMigrationCode(db);
+            using var db = new TypedArraySeedContext();
+            ValidateMigrationAndSnapshotCode(db);
         }
-
 
         [Fact]
         public void Migration_and_snapshot_generate_with_anonymous_array()
         {
-            using var db = new MigrationContext2();
-            ValidateSnapshotAndMigrationCode(db);
+            using var db = new AnonymousArraySeedContext();
+            ValidateMigrationAndSnapshotCode(db);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "Uses internal efcore apis")]
-        private void ValidateSnapshotAndMigrationCode<T>(T context)
-            where T: DbContext, IMigrationContext
+        private void ValidateMigrationAndSnapshotCode<T>(T context)
+            where T : DbContext, IMigrationContext
         {
             const string migrationName = "MyMigration";
             const string @namespace = "MyApp.Data";
@@ -50,7 +49,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer
                 reporter: reporter,
                 args: Array.Empty<string>()
             );
-            
+
             var services = servicesBuilder.Build(context);
             var scaffolder = services.GetRequiredService<IMigrationsScaffolder>();
 

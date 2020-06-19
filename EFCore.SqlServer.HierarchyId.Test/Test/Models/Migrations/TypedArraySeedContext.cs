@@ -2,18 +2,14 @@
 
 namespace Microsoft.EntityFrameworkCore.SqlServer.Test.Models.Migrations
 {
-    internal sealed class MigrationContext1 : MigrationContext<Patriarch>
+    internal sealed class TypedArraySeedContext : MigrationContext<Patriarch>
     {
-        private static readonly HierarchyId _rootHid = HierarchyId.GetRoot();
-        private static readonly HierarchyId _childHid1 = HierarchyId.Parse("/1/");
-        private static readonly HierarchyId _childHid2 = HierarchyId.Parse("/2/");
-
         protected override void SeedData(EntityTypeBuilder<Patriarch> builder)
         {
             builder.HasData(
-                new Patriarch { Id = _rootHid, Name = "Eddard Stark" },
-                new Patriarch { Id = _childHid1, Name = "Robb Stark" },
-                new Patriarch { Id = _childHid2, Name = "Jon Snow" });
+                new Patriarch { Id = HierarchyId.GetRoot(), Name = "Eddard Stark" },
+                new Patriarch { Id = HierarchyId.Parse("/1/"), Name = "Robb Stark" },
+                new Patriarch { Id = HierarchyId.Parse("/2/"), Name = "Jon Snow" });
         }
 
         public override string GetExpectedMigrationCode(string migrationName, string @namespace)
@@ -75,8 +71,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace " + @namespace + @".Migrations
 {
-    [DbContext(typeof(" + nameof(MigrationContext1) + @"))]
-    partial class " + nameof(MigrationContext1) + @"ModelSnapshot : ModelSnapshot
+    [DbContext(typeof(" + nameof(TypedArraySeedContext) + @"))]
+    partial class " + nameof(TypedArraySeedContext) + @"ModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

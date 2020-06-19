@@ -20,6 +20,5 @@ namespace Microsoft.EntityFrameworkCore.SqlServer
             Assert.IsType<SqlServerHierarchyIdTypeMappingSourcePlugin>(serviceProvider.GetService<IRelationalTypeMappingSourcePlugin>());
             Assert.IsType<SqlServerHierarchyIdCodeGeneratorPlugin>(serviceProvider.GetService<IProviderCodeGeneratorPlugin>());
         }
-
     }
 }
