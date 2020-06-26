@@ -10,52 +10,51 @@ namespace Microsoft.EntityFrameworkCore.SqlServer
 {
     public class MigrationTests
     {
+        private delegate string MigrationCodeGetter(string migrationName, string rootNamespace);
+        private delegate string SnapshotCodeGetter(string rootNamespace);
+
         [Fact]
         public void Migration_and_snapshot_generate_with_typed_array()
         {
             using var db = new TypedArraySeedContext();
-            ValidateMigrationAndSnapshotCode(db);
+            ValidateMigrationAndSnapshotCode(db, db.GetExpectedMigrationCode, db.GetExpectedSnapshotCode);
         }
 
         [Fact]
         public void Migration_and_snapshot_generate_with_anonymous_array()
         {
             using var db = new AnonymousArraySeedContext();
-            ValidateMigrationAndSnapshotCode(db);
+            ValidateMigrationAndSnapshotCode(db, db.GetExpectedMigrationCode, db.GetExpectedSnapshotCode);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "Uses internal efcore apis")]
-        private void ValidateMigrationAndSnapshotCode<T>(T context)
-            where T : DbContext, IMigrationContext
+        private static void ValidateMigrationAndSnapshotCode(
+            DbContext context,
+            MigrationCodeGetter migrationCodeGetter,
+            SnapshotCodeGetter snapshotCodeGetter)
         {
             const string migrationName = "MyMigration";
-            const string @namespace = "MyApp.Data";
+            const string rootNamespace = "MyApp.Data";
 
-            var expectedMigration = context.GetExpectedMigrationCode(migrationName, @namespace);
-            var expectedSnapshot = context.GetExpectedSnapshotCode(@namespace);
+            var expectedMigration = migrationCodeGetter(migrationName, rootNamespace);
+            var expectedSnapshot = snapshotCodeGetter(rootNamespace);
 
             var reporter = new OperationReporter(
                 new OperationReportHandler(
-                    m => Console.WriteLine("  error: " + m),
-                    m => Console.WriteLine("   warn: " + m),
-                    m => Console.WriteLine("   info: " + m),
-                    m => Console.WriteLine("verbose: " + m)));
+                    m => Console.WriteLine($"  error: {m}"),
+                    m => Console.WriteLine($"   warn: {m}"),
+                    m => Console.WriteLine($"   info: {m}"),
+                    m => Console.WriteLine($"verbose: {m}")));
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
-            var servicesBuilder = new DesignTimeServicesBuilder(
-                assembly: assembly,
-                startupAssembly: assembly,
-                reporter: reporter,
-                args: Array.Empty<string>()
-            );
-
-            var services = servicesBuilder.Build(context);
-            var scaffolder = services.GetRequiredService<IMigrationsScaffolder>();
-
-            var migration = scaffolder.ScaffoldMigration(
-                migrationName,
-                @namespace);
+            //this works because we have placed the DesignTimeServicesReferenceAttribute
+            //in the test project's properties, which simulates
+            //the nuget package's build target
+            var migration = new DesignTimeServicesBuilder(assembly, assembly, reporter, Array.Empty<string>())
+                .Build(context)
+                .GetRequiredService<IMigrationsScaffolder>()
+                .ScaffoldMigration(migrationName, rootNamespace);
 
             Assert.Equal(expectedMigration, migration.MigrationCode);
             Assert.Equal(expectedSnapshot, migration.SnapshotCode);
