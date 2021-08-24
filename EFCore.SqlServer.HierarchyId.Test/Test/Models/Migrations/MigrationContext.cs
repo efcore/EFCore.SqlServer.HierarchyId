@@ -5,15 +5,18 @@ using System;
 
 namespace Microsoft.EntityFrameworkCore.SqlServer.Test.Models.Migrations
 {
-    internal abstract class MigrationContext<T> : DbContext
-        where T : class
+    internal abstract class MigrationContext<TEntity1, TEntity2> : DbContext
+        where TEntity1 : class
+        where TEntity2 : class
     {
-        protected Type ModelType { get; } = typeof(T);
+        protected Type ModelType1 { get; } = typeof(TEntity1);
+        protected Type ModelType2 { get; } = typeof(TEntity2);
 
         private Type _thisType;
         protected Type ThisType => _thisType ??= GetType();
 
-        public DbSet<T> TestModels { get; set; }
+        public DbSet<TEntity1> TestModels { get; set; }
+        public DbSet<TEntity2> ConvertedTestModels { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options

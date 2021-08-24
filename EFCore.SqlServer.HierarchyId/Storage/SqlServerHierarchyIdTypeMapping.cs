@@ -92,7 +92,12 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Storage
             parameter.Direction = ParameterDirection.Input;
             parameter.ParameterName = name;
 
-            parameter.Value = value == null
+            if (Converter != null)
+            {
+                value = Converter.ConvertToProvider(value);
+            }
+
+            parameter.Value = value is null
                 ? DBNull.Value
                 : _valueConverter.ConvertToProvider(value);
 
@@ -108,8 +113,11 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Storage
 
         public override Expression CustomizeDataReaderExpression(Expression expression)
         {
-            //because _getSqlBytes is specified as the datareader method, 
-            //the value will need to be converted from sqlbytes to hierarchyid
+            if (expression.Type != _valueConverter.ProviderClrType)
+            {
+                expression = Expression.Convert(expression, _valueConverter.ProviderClrType);
+            }
+
             return ReplacingExpressionVisitor.Replace(
                 _valueConverter.ConvertFromProviderExpression.Parameters.Single(),
                 expression,

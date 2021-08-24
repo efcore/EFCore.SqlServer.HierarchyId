@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.SqlServer.Test.Models;
 using Xunit;
@@ -12,7 +13,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer
         public QueryTests()
         {
             _db = new AbrahamicContext();
-            //_db.Database.EnsureDeleted();
+            _db.Database.EnsureDeleted();
             _db.Database.EnsureCreated();
         }
 
@@ -149,6 +150,101 @@ namespace Microsoft.EntityFrameworkCore.SqlServer
                 condense(_db.Sql));
 
             Assert.Equal(new[] { "Isaac" }, results);
+        }
+
+        [Fact]
+        public void Converted_HierarchyId_can_be_sent_as_parameter()
+        {
+            var results = Enumerable.ToList(
+                from p in _db.ConvertedPatriarchy
+                where p.HierarchyId == HierarchyId.Parse("/1/").ToString()
+                select p.Name);
+
+            Assert.Equal(
+                condense(@"SELECT [c].[Name] FROM [ConvertedPatriarchy] AS [c] WHERE [c].[HierarchyId] = '/1/'"),
+                condense(_db.Sql));
+
+            Assert.Equal(new[] { "Isaac" }, results);
+        }
+
+        [Fact]
+        public void Can_insert_HierarchyId()
+        {
+            using (_db.Database.BeginTransaction())
+            {
+                var entities = new List<Patriarch>
+                {
+                    new() { Id = HierarchyId.Parse("/2/1/"), Name = "Thrór" },
+                    new() { Id = HierarchyId.Parse("/2/2/"), Name = "Thráin II" },
+                    new() { Id = HierarchyId.Parse("/3/"), Name = "Thorin Oakenshield" }
+                };
+
+                _db.AddRange(entities);
+                _db.SaveChanges();
+                _db.ChangeTracker.Clear();
+
+                var queried = _db.Patriarchy.Where(e => e.Name.StartsWith("Th")).OrderBy(e => e.Id).ToList();
+                
+                Assert.Equal(3, queried.Count);
+                
+                Assert.Equal(HierarchyId.Parse("/2/1/"), queried[0].Id);
+                Assert.Equal("Thrór", queried[0].Name);
+                
+                Assert.Equal(HierarchyId.Parse("/2/2/"), queried[1].Id);
+                Assert.Equal("Thráin II", queried[1].Name);
+                
+                Assert.Equal(HierarchyId.Parse("/3/"), queried[2].Id);
+                Assert.Equal("Thorin Oakenshield", queried[2].Name);
+            }
+        }
+
+        [Fact]
+        public void Can_insert_and_update_converted_HierarchyId()
+        {
+            using (_db.Database.BeginTransaction())
+            {
+                var entities = new List<ConvertedPatriarch>
+                {
+                    new() { HierarchyId = HierarchyId.Parse("/2/1/").ToString(), Name = "Thrór" },
+                    new() { HierarchyId = HierarchyId.Parse("/2/2/").ToString(), Name = "Thráin II" },
+                    new() { HierarchyId = HierarchyId.Parse("/3/").ToString(), Name = "Thorin Oakenshield" }
+                };
+
+                _db.AddRange(entities);
+                _db.SaveChanges();
+                _db.ChangeTracker.Clear();
+
+                var queried = _db.ConvertedPatriarchy.Where(e => e.Name.StartsWith("Th")).OrderBy(e => e.Id).ToList();
+                
+                Assert.Equal(3, queried.Count);
+                
+                Assert.Equal(HierarchyId.Parse("/2/1/").ToString(), queried[0].HierarchyId);
+                Assert.Equal("Thrór", queried[0].Name);
+                
+                Assert.Equal(HierarchyId.Parse("/2/2/").ToString(), queried[1].HierarchyId);
+                Assert.Equal("Thráin II", queried[1].Name);
+                
+                Assert.Equal(HierarchyId.Parse("/3/").ToString(), queried[2].HierarchyId);
+                Assert.Equal("Thorin Oakenshield", queried[2].Name);
+
+                queried[2].HierarchyId = "/3/1/";
+
+                _db.SaveChanges();
+                _db.ChangeTracker.Clear();
+
+                queried = _db.ConvertedPatriarchy.Where(e => e.Name.StartsWith("Th")).OrderBy(e => e.Id).ToList();
+                
+                Assert.Equal(3, queried.Count);
+                
+                Assert.Equal(HierarchyId.Parse("/2/1/").ToString(), queried[0].HierarchyId);
+                Assert.Equal("Thrór", queried[0].Name);
+                
+                Assert.Equal(HierarchyId.Parse("/2/2/").ToString(), queried[1].HierarchyId);
+                Assert.Equal("Thráin II", queried[1].Name);
+                
+                Assert.Equal(HierarchyId.Parse("/3/1/").ToString(), queried[2].HierarchyId);
+                Assert.Equal("Thorin Oakenshield", queried[2].Name);
+            }
         }
 
         [Fact]
