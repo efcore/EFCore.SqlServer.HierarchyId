@@ -8,11 +8,11 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Storage
 
         public virtual RelationalTypeMapping FindMapping(in RelationalTypeMappingInfo mappingInfo)
         {
-            var clrType = mappingInfo.ClrType ?? typeof(HierarchyId);
+            var clrType = mappingInfo.ClrType;
             var storeTypeName = mappingInfo.StoreTypeName;
 
             return typeof(HierarchyId).IsAssignableFrom(clrType) || storeTypeName == SqlServerTypeName
-                ? new SqlServerHierarchyIdTypeMapping(SqlServerTypeName, clrType)
+                ? new SqlServerHierarchyIdTypeMapping(SqlServerTypeName, clrType ?? typeof(HierarchyId))
                 : null;
         }
     }
