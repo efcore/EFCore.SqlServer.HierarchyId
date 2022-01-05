@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Microsoft.EntityFrameworkCore.SqlServer.Storage
@@ -11,7 +12,8 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Storage
             var clrType = mappingInfo.ClrType;
             var storeTypeName = mappingInfo.StoreTypeName;
 
-            return typeof(HierarchyId).IsAssignableFrom(clrType) || storeTypeName == SqlServerTypeName
+            return typeof(HierarchyId).IsAssignableFrom(clrType)
+                   || SqlServerTypeName.Equals(storeTypeName, StringComparison.OrdinalIgnoreCase)
                 ? new SqlServerHierarchyIdTypeMapping(SqlServerTypeName, clrType ?? typeof(HierarchyId))
                 : null;
         }
