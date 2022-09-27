@@ -7,7 +7,7 @@
     <Copyright>© 2022 Brice Lambson, et al. All rights reserved.</Copyright>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)key.snk</AssemblyOriginatorKeyFile>
-    <Version>3.0.1</Version>
+    <Version>3.0.2</Version>
     <Features>strict</Features>
     <LangVersion>latest</LangVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
