@@ -29,16 +29,15 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 
-namespace TestNamespace
+namespace TestNamespace;
+
+public partial class Patriarch
 {
-    public partial class Patriarch
-    {
-        [Key]
-        public HierarchyId Id { get; set; }
-        public string Name { get; set; }
-    }
+    [Key]
+    public HierarchyId Id { get; set; }
+
+    public string Name { get; set; }
 }
 ",
                     code.AdditionalFiles.Single(f => f.Path == "Patriarch.cs"));
@@ -68,17 +67,17 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 
-namespace TestNamespace
+namespace TestNamespace;
+
+public partial class Patriarch
 {
-    public partial class Patriarch
-    {
-        [Key]
-        public int Id { get; set; }
-        public HierarchyId Hierarchy { get; set; }
-        public string Name { get; set; }
-    }
+    [Key]
+    public int Id { get; set; }
+
+    public HierarchyId Hierarchy { get; set; }
+
+    public string Name { get; set; }
 }
 ",
                     code.AdditionalFiles.Single(f => f.Path == "Patriarch.cs"));
@@ -108,17 +107,17 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 
-namespace TestNamespace
+namespace TestNamespace;
+
+public partial class Patriarch
 {
-    public partial class Patriarch
-    {
-        [Key]
-        public HierarchyId Id { get; set; }
-        public HierarchyId Hierarchy { get; set; }
-        public string Name { get; set; }
-    }
+    [Key]
+    public HierarchyId Id { get; set; }
+
+    public HierarchyId Hierarchy { get; set; }
+
+    public string Name { get; set; }
 }
 ",
                     code.AdditionalFiles.Single(f => f.Path == "Patriarch.cs"));

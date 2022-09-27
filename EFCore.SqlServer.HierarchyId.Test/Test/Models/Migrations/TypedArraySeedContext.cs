@@ -32,35 +32,39 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace {rootNamespace}.Migrations
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
+namespace MyApp.Data.Migrations
 {{
-    public partial class {migrationName} : Migration
+    /// <inheritdoc />
+    public partial class MyMigration : Migration
     {{
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {{
             migrationBuilder.CreateTable(
-                name: ""{nameof(ConvertedTestModels)}"",
+                name: ""ConvertedTestModels"",
                 columns: table => new
                 {{
-                    {nameof(ConvertedPatriarch.Id)} = table.Column<int>(type: ""int"", nullable: false),
-                    {nameof(ConvertedPatriarch.HierarchyId)} = table.Column<{nameof(HierarchyId)}>(type: ""hierarchyid"", nullable: true),
-                    {nameof(ConvertedPatriarch.Name)} = table.Column<string>(type: ""nvarchar(max)"", nullable: true)
+                    Id = table.Column<int>(type: ""int"", nullable: false),
+                    HierarchyId = table.Column<HierarchyId>(type: ""hierarchyid"", nullable: true),
+                    Name = table.Column<string>(type: ""nvarchar(max)"", nullable: true)
                 }},
                 constraints: table =>
                 {{
-                    table.PrimaryKey(""PK_{nameof(ConvertedTestModels)}"", x => x.{nameof(ConvertedPatriarch.Id)});
+                    table.PrimaryKey(""PK_ConvertedTestModels"", x => x.Id);
                 }});
 
             migrationBuilder.CreateTable(
-                name: ""{nameof(TestModels)}"",
+                name: ""TestModels"",
                 columns: table => new
                 {{
-                    {nameof(Patriarch.Id)} = table.Column<{nameof(HierarchyId)}>(type: ""hierarchyid"", nullable: false),
-                    {nameof(Patriarch.Name)} = table.Column<string>(type: ""nvarchar(max)"", nullable: true)
+                    Id = table.Column<HierarchyId>(type: ""hierarchyid"", nullable: false),
+                    Name = table.Column<string>(type: ""nvarchar(max)"", nullable: true)
                 }},
                 constraints: table =>
                 {{
-                    table.PrimaryKey(""PK_{nameof(TestModels)}"", x => x.{nameof(Patriarch.Id)});
+                    table.PrimaryKey(""PK_TestModels"", x => x.Id);
                 }});
 
             migrationBuilder.InsertData(
@@ -68,9 +72,9 @@ namespace {rootNamespace}.Migrations
                 columns: new[] {{ ""Id"", ""HierarchyId"", ""Name"" }},
                 values: new object[,]
                 {{
-                    {{ 1, {typeof(HierarchyId).FullName}.Parse(""/""), ""Eddard Stark"" }},
-                    {{ 2, {typeof(HierarchyId).FullName}.Parse(""/1/""), ""Robb Stark"" }},
-                    {{ 3, {typeof(HierarchyId).FullName}.Parse(""/2/""), ""Jon Snow"" }}
+                    {{ 1, Microsoft.EntityFrameworkCore.HierarchyId.Parse(""/""), ""Eddard Stark"" }},
+                    {{ 2, Microsoft.EntityFrameworkCore.HierarchyId.Parse(""/1/""), ""Robb Stark"" }},
+                    {{ 3, Microsoft.EntityFrameworkCore.HierarchyId.Parse(""/2/""), ""Jon Snow"" }}
                 }});
 
             migrationBuilder.InsertData(
@@ -78,19 +82,20 @@ namespace {rootNamespace}.Migrations
                 columns: new[] {{ ""Id"", ""Name"" }},
                 values: new object[,]
                 {{
-                    {{ {typeof(HierarchyId).FullName}.Parse(""/""), ""Eddard Stark"" }},
-                    {{ {typeof(HierarchyId).FullName}.Parse(""/1/""), ""Robb Stark"" }},
-                    {{ {typeof(HierarchyId).FullName}.Parse(""/2/""), ""Jon Snow"" }}
+                    {{ Microsoft.EntityFrameworkCore.HierarchyId.Parse(""/""), ""Eddard Stark"" }},
+                    {{ Microsoft.EntityFrameworkCore.HierarchyId.Parse(""/1/""), ""Robb Stark"" }},
+                    {{ Microsoft.EntityFrameworkCore.HierarchyId.Parse(""/2/""), ""Jon Snow"" }}
                 }});
         }}
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {{
             migrationBuilder.DropTable(
                 name: ""ConvertedTestModels"");
 
             migrationBuilder.DropTable(
-                name: ""{nameof(TestModels)}"");
+                name: ""TestModels"");
         }}
     }}
 }}
