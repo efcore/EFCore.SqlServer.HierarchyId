@@ -32,12 +32,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
-namespace MyApp.Data.Migrations
+namespace {rootNamespace}.Migrations
 {{
-    /// <inheritdoc />
-    public partial class MyMigration : Migration
+    public partial class {migrationName} : Migration
     {{
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

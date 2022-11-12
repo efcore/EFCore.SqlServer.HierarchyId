@@ -85,6 +85,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer.Storage
             //command, and the value is already a hierarchyid
             return $"'{value}'";
         }
+
         public override DbParameter CreateParameter(DbCommand command, string name, object value, bool? nullable = null, ParameterDirection direction = ParameterDirection.Input)
         {
             var parameter = command.CreateParameter();

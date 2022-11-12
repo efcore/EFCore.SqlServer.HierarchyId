@@ -104,17 +104,17 @@ public class RelationalScaffoldingModelFactoryTest
             },
             column =>
             {
-                Assert.Equal("hierarchy", column.GetColumnBaseName());
+                Assert.Equal("hierarchy", column.GetColumnName());
                 Assert.Equal(typeof(HierarchyId), column.ClrType);
             },
             column =>
             {
-                Assert.Equal("occupation", column.GetColumnBaseName());
+                Assert.Equal("occupation", column.GetColumnName());
                 Assert.Equal(typeof(string), column.ClrType);
             },
             column =>
             {
-                Assert.Equal("salary", column.GetColumnBaseName());
+                Assert.Equal("salary", column.GetColumnName());
                 Assert.Equal(typeof(int?), column.ClrType);
             });
     }

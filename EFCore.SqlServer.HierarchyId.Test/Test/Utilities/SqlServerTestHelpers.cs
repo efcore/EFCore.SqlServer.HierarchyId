@@ -19,11 +19,7 @@ public class SqlServerTestHelpers : TestHelpers
         => services.AddEntityFrameworkSqlServer();
 
     public override DbContextOptionsBuilder UseProviderOptions(DbContextOptionsBuilder optionsBuilder)
-    {
-        return optionsBuilder.UseSqlServer(new SqlConnection("Database=DummyDatabase"));
-    }
-    //public override void UseProviderOptions(DbContextOptionsBuilder optionsBuilder)
-    //    => optionsBuilder.UseSqlServer(new SqlConnection("Database=DummyDatabase"));
+        => optionsBuilder.UseSqlServer(new SqlConnection("Database=DummyDatabase"));
 
     public override LoggingDefinitions LoggingDefinitions { get; } = new SqlServerLoggingDefinitions();
 }

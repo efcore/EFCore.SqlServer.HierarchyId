@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Design.Internal;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Scaffolding;
@@ -22,7 +21,6 @@ public class FakeScaffoldingModelFactory : RelationalScaffoldingModelFactory
         IPluralizer pluralizer,
         ICSharpUtilities cSharpUtilities,
         IScaffoldingTypeMapper scaffoldingTypeMapper,
-        LoggingDefinitions loggingDefinitions,
         IModelRuntimeInitializer modelRuntimeInitializer)
         : base(reporter, candidateNamingService, pluralizer, cSharpUtilities, scaffoldingTypeMapper,
             modelRuntimeInitializer)
