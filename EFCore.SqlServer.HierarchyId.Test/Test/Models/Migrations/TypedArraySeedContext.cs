@@ -36,6 +36,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace {rootNamespace}.Migrations
 {{
+    /// <inheritdoc />
     public partial class {migrationName} : Migration
     {{
         /// <inheritdoc />
