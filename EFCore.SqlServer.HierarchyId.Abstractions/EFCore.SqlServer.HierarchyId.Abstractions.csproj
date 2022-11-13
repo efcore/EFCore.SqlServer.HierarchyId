@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="dotMorten.Microsoft.SqlServer.Types" Version="2.6.0" />
+	  <PackageReference Include="Microsoft.SqlServer.Types" Version="160.900.6-rc0" />
   </ItemGroup>
 
 </Project>
