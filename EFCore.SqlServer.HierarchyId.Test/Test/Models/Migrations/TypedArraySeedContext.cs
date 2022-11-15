@@ -43,28 +43,28 @@ namespace {rootNamespace}.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {{
             migrationBuilder.CreateTable(
-                name: ""ConvertedTestModels"",
+                name: ""{nameof(ConvertedTestModels)}"",
                 columns: table => new
                 {{
-                    Id = table.Column<int>(type: ""int"", nullable: false),
-                    HierarchyId = table.Column<HierarchyId>(type: ""hierarchyid"", nullable: true),
-                    Name = table.Column<string>(type: ""nvarchar(max)"", nullable: true)
+                    {nameof(ConvertedPatriarch.Id)} = table.Column<int>(type: ""int"", nullable: false),
+                    {nameof(ConvertedPatriarch.HierarchyId)} = table.Column<HierarchyId>(type: ""hierarchyid"", nullable: true),
+                    {nameof(ConvertedPatriarch.Name)} = table.Column<string>(type: ""nvarchar(max)"", nullable: true)
                 }},
                 constraints: table =>
                 {{
-                    table.PrimaryKey(""PK_ConvertedTestModels"", x => x.Id);
+                    table.PrimaryKey(""PK_{nameof(ConvertedTestModels)}"", x => x.{nameof(ConvertedPatriarch.Id)});
                 }});
 
             migrationBuilder.CreateTable(
-                name: ""TestModels"",
+                name: ""{nameof(TestModels)}"",
                 columns: table => new
                 {{
-                    Id = table.Column<HierarchyId>(type: ""hierarchyid"", nullable: false),
-                    Name = table.Column<string>(type: ""nvarchar(max)"", nullable: true)
+                    {nameof(Patriarch.Id)} = table.Column<HierarchyId>(type: ""hierarchyid"", nullable: false),
+                    {nameof(Patriarch.Name)} = table.Column<string>(type: ""nvarchar(max)"", nullable: true)
                 }},
                 constraints: table =>
                 {{
-                    table.PrimaryKey(""PK_TestModels"", x => x.Id);
+                    table.PrimaryKey(""PK_{nameof(TestModels)}"", x => x.{nameof(Patriarch.Id)});
                 }});
 
             migrationBuilder.InsertData(
@@ -72,9 +72,9 @@ namespace {rootNamespace}.Migrations
                 columns: new[] {{ ""Id"", ""HierarchyId"", ""Name"" }},
                 values: new object[,]
                 {{
-                    {{ 1, Microsoft.EntityFrameworkCore.HierarchyId.Parse(""/""), ""Eddard Stark"" }},
-                    {{ 2, Microsoft.EntityFrameworkCore.HierarchyId.Parse(""/1/""), ""Robb Stark"" }},
-                    {{ 3, Microsoft.EntityFrameworkCore.HierarchyId.Parse(""/2/""), ""Jon Snow"" }}
+                    {{ 1, {typeof(HierarchyId).FullName}.Parse(""/""), ""Eddard Stark"" }},
+                    {{ 2, {typeof(HierarchyId).FullName}.Parse(""/1/""), ""Robb Stark"" }},
+                    {{ 3, {typeof(HierarchyId).FullName}.Parse(""/2/""), ""Jon Snow"" }}
                 }});
 
             migrationBuilder.InsertData(
@@ -82,9 +82,9 @@ namespace {rootNamespace}.Migrations
                 columns: new[] {{ ""Id"", ""Name"" }},
                 values: new object[,]
                 {{
-                    {{ Microsoft.EntityFrameworkCore.HierarchyId.Parse(""/""), ""Eddard Stark"" }},
-                    {{ Microsoft.EntityFrameworkCore.HierarchyId.Parse(""/1/""), ""Robb Stark"" }},
-                    {{ Microsoft.EntityFrameworkCore.HierarchyId.Parse(""/2/""), ""Jon Snow"" }}
+                    {{ {typeof(HierarchyId).FullName}.Parse(""/""), ""Eddard Stark"" }},
+                    {{ {typeof(HierarchyId).FullName}.Parse(""/1/""), ""Robb Stark"" }},
+                    {{ {typeof(HierarchyId).FullName}.Parse(""/2/""), ""Jon Snow"" }}
                 }});
         }}
 
@@ -95,7 +95,7 @@ namespace {rootNamespace}.Migrations
                 name: ""ConvertedTestModels"");
 
             migrationBuilder.DropTable(
-                name: ""TestModels"");
+                name: ""{nameof(TestModels)}"");
         }}
     }}
 }}
