@@ -47,7 +47,7 @@ namespace {rootNamespace}.Migrations
                 columns: table => new
                 {{
                     Id = table.Column<int>(type: ""int"", nullable: false),
-                    HierarchyId = table.Column<HierarchyId>(type: ""hierarchyid"", nullable: true),
+                    HierarchyId = table.Column<{nameof(HierarchyId)}>(type: ""hierarchyid"", nullable: true),
                     Name = table.Column<string>(type: ""nvarchar(max)"", nullable: true)
                 }},
                 constraints: table =>
@@ -56,15 +56,15 @@ namespace {rootNamespace}.Migrations
                 }});
 
             migrationBuilder.CreateTable(
-                name: ""TestModels"",
+                name: ""{nameof(TestModels)}"",
                 columns: table => new
                 {{
-                    Id = table.Column<HierarchyId>(type: ""hierarchyid"", nullable: false),
-                    Name = table.Column<string>(type: ""nvarchar(max)"", nullable: true)
+                    {nameof(Patriarch.Id)} = table.Column<{nameof(HierarchyId)}>(type: ""hierarchyid"", nullable: false),
+                    {nameof(Patriarch.Name)} = table.Column<string>(type: ""nvarchar(max)"", nullable: true)
                 }},
                 constraints: table =>
                 {{
-                    table.PrimaryKey(""PK_TestModels"", x => x.Id);
+                    table.PrimaryKey(""PK_{nameof(TestModels)}"", x => x.{nameof(Patriarch.Id)});
                 }});
 
             migrationBuilder.InsertData(
@@ -95,7 +95,7 @@ namespace {rootNamespace}.Migrations
                 name: ""ConvertedTestModels"");
 
             migrationBuilder.DropTable(
-                name: ""TestModels"");
+                name: ""{nameof(TestModels)}"");
         }}
     }}
 }}
