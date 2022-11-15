@@ -43,7 +43,7 @@ namespace {rootNamespace}.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {{
             migrationBuilder.CreateTable(
-                name: ""ConvertedTestModels"",
+                name: ""{nameof(ConvertedTestModels)}"",
                 columns: table => new
                 {{
                     Id = table.Column<int>(type: ""int"", nullable: false),

@@ -12,7 +12,7 @@ namespace Microsoft.EntityFrameworkCore.SqlServer;
 
 public class RelationalScaffoldingModelFactoryTest
 {
-    private readonly Microsoft.EntityFrameworkCore.Scaffolding.IScaffoldingModelFactory _factory;
+    private readonly IScaffoldingModelFactory _factory;
     private readonly TestOperationReporter _reporter;
 
     private static readonly DatabaseModel Database;
