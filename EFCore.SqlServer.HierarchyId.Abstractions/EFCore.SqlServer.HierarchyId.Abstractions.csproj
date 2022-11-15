@@ -1,16 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>EntityFrameworkCore.SqlServer.HierarchyId.Abstractions</AssemblyName>
-    <RootNamespace>Microsoft.EntityFrameworkCore</RootNamespace>
-    <Description>Common abstractions for using hierarchyid with EF Core</Description>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<AssemblyName>EntityFrameworkCore.SqlServer.HierarchyId.Abstractions</AssemblyName>
+		<RootNamespace>Microsoft.EntityFrameworkCore</RootNamespace>
+		<Description>Common abstractions for using hierarchyid with EF Core</Description>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-	  <PackageReference Include="Microsoft.SqlServer.Types" Version="160.900.6-rc0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SqlServer.Types" Version="160.900.6-rc0" />
+	</ItemGroup>
 
 </Project>

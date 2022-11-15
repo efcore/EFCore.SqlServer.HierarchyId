@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<IsPackable>false</IsPackable>
@@ -13,7 +12,6 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational.Specification.Tests" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="7.0.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
-
 		<PackageReference Include="xunit" Version="2.4.2" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
 	</ItemGroup>
@@ -21,5 +19,4 @@
 	<ItemGroup>
 		<ProjectReference Include="..\EFCore.SqlServer.HierarchyId\EFCore.SqlServer.HierarchyId.csproj" />
 	</ItemGroup>
-
 </Project>

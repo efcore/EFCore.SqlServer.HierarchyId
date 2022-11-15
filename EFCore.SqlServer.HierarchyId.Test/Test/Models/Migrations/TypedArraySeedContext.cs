@@ -47,7 +47,7 @@ namespace {rootNamespace}.Migrations
                 columns: table => new
                 {{
                     {nameof(ConvertedPatriarch.Id)} = table.Column<int>(type: ""int"", nullable: false),
-                    {nameof(ConvertedPatriarch.HierarchyId)} = table.Column<HierarchyId>(type: ""hierarchyid"", nullable: true),
+                    {nameof(ConvertedPatriarch.HierarchyId)} = table.Column<{nameof(HierarchyId)}>(type: ""hierarchyid"", nullable: true),
                     {nameof(ConvertedPatriarch.Name)} = table.Column<string>(type: ""nvarchar(max)"", nullable: true)
                 }},
                 constraints: table =>
