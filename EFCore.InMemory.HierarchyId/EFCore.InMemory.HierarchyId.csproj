@@ -11,7 +11,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageProjectUrl>https://github.com/efcore/EFCore.SqlServer.HierarchyId</PackageProjectUrl>
     <Copyright>© 2023 Brice Lambson, et al. All rights reserved.</Copyright>
-    <Version>8.0.0-alpha.1</Version>
+    <Version>8.0.0</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReleaseNotes>https://github.com/efcore/EFCore.SqlServer.HierarchyId/releases</PackageReleaseNotes>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
