@@ -5,8 +5,8 @@ EntityFrameworkCore.SqlServer.HierarchyId
 
 Adds hierarchyid support to the SQL Server EF Core provider.
 
-Moved to EF Core
-----------------
+⚠️ Moved to EF Core
+------------------
 
 This project has been merged into [dotnet/efcore](https://github.com/dotnet/efcore). All future bug fixes, enhancements, and releases will be done as part of the main EF Core project.
 
